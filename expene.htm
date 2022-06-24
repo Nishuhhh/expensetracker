@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+    <body>
+        <form onsubmit="saveToLocalStorage(event)">
+            <label>choose expenses</label>
+            <input id = 'choexpen' type ="text" name = "choexpen" required/>
+            <label>choose a description</label>
+            <select name="chosdesc" id="chosdesc">
+                <option value="petrol">petrol</option>
+                <option value="diesel">diesel</option>
+                <option value="gas">gas</option>
+                <option value="izol">izol</option>
+              </select>
+            <label>choose a category</label>
+            <input id = 'choscate' type ="text" name = "choscate" required/>
+            <button>Add Expenses</button>
+        </form>
+        <ul  id = 'listOfUsers'></ul>
+        <script>
+            
+            function saveToLocalStorage(event) {
+                event.preventDefault() ;
+                const expenses= event.target.choexpen.value ;
+                const category = event.target.chosdesc.value ;
+                const descrip = event.target.choscate.value ;
+             
+                const obj =
+                {
+                    expenses,
+                    category,
+                    descrip,
+
+                }
+                
+
+                localStorage.setItem(obj.choexpen ,JSON.stringify(obj))
+                ShowNewUserOnScreen(obj) 
+            }
+            function ShowNewUserOnScreen(user)
+            {
+                
+                const parentNode = document.getElementById('listOfUsers') ;
+                const ChildNode = `<li  id= ${user.expenses}> ${user.expenses} - ${user.category}  -  ${user.descrip}     
+                    <button onclick= deleteUser('${user.expenses}')> Delete </button> <button  onclick =EditUser('${user.expenses}') ,'${user.category}','${user.descrip}'>Edit </button></li>`
+                parentNode.innerHTML = parentNode.innerHTML + ChildNode ;
+            }
+            
+            
+            function deleteUser(chosexpen)
+               {
+                
+                localStorage.removeItem(chosexpen) ;
+                
+                removeuserfromScreen(chosexpen) ;
+               }
+
+               
+               function removeuserfromScreen(chosexpen)
+               {
+                const parentNode = document.getElementById('listOfUsers') ;
+                const ChildNodetoremove = document.getElementById(chosexpen) ;
+                parentNode.removeChild(ChildNodetoremove);
+               }
+                function EditUser(chosexpen , chosdesc , choscate)
+                {
+                  document.getElementById('choexpen').value = chosexpen;
+                  document.getElementById('chosdesc').value = chosdesc ;
+                  document.getElementById('choscate').value = choscate ;
+
+                  deleteUser(chosexpen) ;
+                  
+                }
+            </script>
+    </body>
+</html>
